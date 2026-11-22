@@ -75,16 +75,27 @@ MESSAGE_CHANNEL=whatsapp      # whatsapp = real delivery, log = simulator
 Check status: `GET /api/whatsapp/status`
 Verify credentials without sending: `python -c "import asyncio; from whatsapp.adapter import WhatsAppAdapter; print(asyncio.run(WhatsAppAdapter().verify_number()))"`
 
-## Deploy on Render
+## Deploy on Render (one blueprint, 4 fields, done)
 
-1. Push the repo to GitHub.
-2. Render → **New → Blueprint** → pick the repo (`render.yaml` is read automatically).
-3. After the first deploy, set the secrets in the service's **Environment** tab:
-   `LLM_API_KEY`, `WHATSAPP_ACCESS_TOKEN`, `WHATSAPP_PHONE_ID`,
-   `WHATSAPP_VERIFY_TOKEN`, `WHATSAPP_APP_SECRET` (from the Meta app dashboard).
-4. Your public base URL is `https://<app>.onrender.com` — point the Meta webhook
-   callback at `https://<app>.onrender.com/api/whatsapp/webhook`.
-5. Re-run the handshake test and `GET /api/whatsapp/status`.
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Emmanuel-Praise/Catfish)
+
+1. Click **Deploy to Render** above (or: Render → **New → Blueprint** → connect this repo).
+   Render reads `render.yaml` automatically — every setting is pre-filled.
+2. At creation it asks for exactly **4 secrets** — paste them in the form:
+   | Field | Where to get it |
+   |---|---|
+   | `NVIDIA_API_KEY` | build.nvidia.com → **API Keys** → Generate |
+   | `WHATSAPP_ACCESS_TOKEN` | Meta for Developers → your app → **WhatsApp → API Setup** |
+   | `WHATSAPP_PHONE_ID` | Same page, **Phone number ID** |
+   | `WHATSAPP_VERIFY_TOKEN` | Make up any random string (you'll paste it in Meta later) |
+3. Press **Apply/Deploy** and wait for the first build. That's it — no other
+   settings to touch anywhere in the dashboard.
+4. When it's up, copy your URL `https://<name>.onrender.com` and paste it in the
+   Meta webhook callback as `https://<name>.onrender.com/api/whatsapp/webhook`
+   (verify token = the string you made up in step 2).
+
+Your NVIDIA key already works out of the box — the model, fallback, timeout,
+reply pacing, quiet hours, and WhatsApp API version are all set in `render.yaml`.
 
 Caveats:
 
