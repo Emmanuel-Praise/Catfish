@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kile</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-avatar">K</div>
+        <div>
+          <h1>Kile</h1>
+          <p>conversational companion</p>
+        </div>
+      </div>
+
+      <button id="newParticipantBtn" class="btn btn-primary btn-block">+ New participant</button>
+      <button id="bulkParticipantBtn" class="btn btn-ghost btn-block">+ Add numbers</button>
+
+      <div class="section-label">Participants</div>
+      <ul id="participantList" class="participant-list"></ul>
+
+      <div class="sidebar-footer">
+        <div id="llmStatus" class="status-pill status-unknown">API: unknown</div>
+      </div>
+    </aside>
+
+    <main class="chat">
+      <header class="chat-header">
+        <div class="chat-header-info">
+          <div id="chatAvatar" class="chat-avatar">?</div>
+          <div>
+            <h2 id="chatName">Select a participant</h2>
+            <p id="chatMeta">No conversation open</p>
+          </div>
+        </div>
+        <div class="chat-actions">
+          <button id="memoryBtn" class="btn btn-ghost" title="View memories">Memories</button>
+          <button id="proactiveBtn" class="btn btn-ghost" title="Kile initiates">Kile initiates</button>
+        </div>
+      </header>
+
+      <section id="messages" class="messages">
+        <div class="empty-state" id="emptyState">
+          <div class="empty-avatar">K</div>
+          <h3>Start a conversation</h3>
+          <p>Pick a participant from the sidebar, or create a new one.</p>
+        </div>
+      </section>
+
+      <div id="typing" class="typing hidden">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <em>Kile is typing…</em>
+      </div>
+
+      <footer class="composer">
+        <textarea id="input" rows="1" placeholder="Message…" disabled></textarea>
+        <button id="sendBtn" class="btn btn-primary" disabled>Send</button>
+      </footer>
+    </main>
+  </div>
+
+  <dialog id="newParticipantDialog">
+    <form method="dialog" id="newParticipantForm" class="dialog-form">
+      <h3>New participant</h3>
+      <label>Name
+        <input name="name" required maxlength="120" placeholder="e.g. Ada" />
+      </label>
+      <label>Contact ref <span class="muted">(for WhatsApp later)</span>
+        <input name="contact_ref" maxlength="200" placeholder="phone / handle" />
+      </label>
+      <label>Notes about them
+        <textarea name="notes" maxlength="2000" placeholder="context, how you met, tone…"></textarea>
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" name="opted_in" checked /> Opted in to the experiment
+      </label>
+      <div class="dialog-actions">
+        <button value="cancel" class="btn btn-ghost" formnovalidate>Cancel</button>
+        <button value="create" class="btn btn-primary">Create</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="bulkParticipantDialog">
+    <form method="dialog" id="bulkParticipantForm" class="dialog-form">
+      <h3>Add numbers</h3>
+      <p class="muted">One WhatsApp number per line (commas/spaces also work). Created as opted-in contacts.</p>
+      <label>Numbers
+        <textarea name="text" rows="8" required maxlength="20000" placeholder="+237671234567&#10;+237655987654"></textarea>
+      </label>
+      <div class="dialog-actions">
+        <button value="cancel" class="btn btn-ghost" formnovalidate>Cancel</button>
+        <button value="add" class="btn btn-primary">Add</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="memoryDialog">
+    <div class="dialog-form">
+      <h3>What Kile remembers</h3>
+      <ul id="memoryList" class="memory-list"></ul>
+      <div class="dialog-actions">
+        <button id="closeMemoryBtn" class="btn btn-ghost">Close</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

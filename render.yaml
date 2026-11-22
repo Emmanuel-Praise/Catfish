@@ -1,0 +1,45 @@
+# Render blueprint — deploy from the repo root.
+# Secrets (API keys, tokens) are NOT stored here: set them in the Render
+# dashboard after the first deploy (they show up as "sync: false" entries).
+services:
+  - type: web
+    name: kile
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: NVIDIA_BASE_URL
+        value: https://integrate.api.nvidia.com/v1
+      - key: NVIDIA_MODEL
+        value: nvidia/nemotron-3.5-super-vl-120b-a12b
+      - key: NVIDIA_FALLBACK_MODEL
+        value: nvidia/nemotron-3.5-lightning-30b-a3b
+      - key: NVIDIA_TIMEOUT_SECONDS
+        value: "40"
+      - key: MESSAGE_CHANNEL
+        value: whatsapp
+      - key: WHATSAPP_API_VERSION
+        value: v25.0
+      - key: REPLY_DELAY_MIN
+        value: "3"
+      - key: REPLY_DELAY_MAX
+        value: "9"
+      - key: PROACTIVE_QUIET_START
+        value: "22"
+      - key: PROACTIVE_QUIET_END
+        value: "08"
+      - key: PROACTIVE_COOLDOWN_HOURS
+        value: "12"
+      - key: NVIDIA_API_KEY
+        sync: false
+      - key: WHATSAPP_ACCESS_TOKEN
+        sync: false
+      - key: WHATSAPP_PHONE_ID
+        sync: false
+      - key: WHATSAPP_VERIFY_TOKEN
+        sync: false
+      - key: WHATSAPP_APP_SECRET
+        sync: false

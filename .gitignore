@@ -1,0 +1,8 @@
+.env
+kile.db
+kile.log
+kile.log.*
+uvicorn.log
+uvicorn.err.log
+__pycache__/
+*.pyc
